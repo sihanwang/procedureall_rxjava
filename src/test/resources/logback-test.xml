@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="${log.scan.reload:-false}" scan="${log.scan.reload:-false}" scanPeriod="10 seconds">
+
+  <logger name="ch.qos.logback" level="ALL" additivity="false" />
+
+  <jmxConfigurator />
+  <property resource="config/${PC_ENVIRONMENT:-local}-${flavor:-development}/config.properties" />
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>%-5p %d [%t] [%replace(objectid=%X{objectId} objecttypeid=%X{objectTypeId} rundatetime=%X{runDate} guid=%X{guid} sessionguid=%X{sessionGuid}){'(\w+=)( |$)',''}] %c{20}: %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${log.directory:-/local/logs/cdb}/${app.name:-cdb-procedurecall-dervice}-${flavor:-development}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${log.directory:-/local/logs/cdb}/${app.name:-cdb-procedurecall-service}-${flavor:-development}.log.%i</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>5</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>20MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+  </appender>
+
+  <logger name="net.spy">
+    <level value="ERROR" />
+  </logger>
+
+
+  <logger name="com.pointcarbon.esb.transport.oracle">
+    <level value="${log.oracle.level:-DEBUG}" />
+  </logger>
+
+  <logger name="com.pointcarbon">
+    <level value="${log.pointcarbon.level:-DEBUG}" />
+  </logger>
+
+  <logger name="com.tr">
+    <level value="${log.pointcarbon.level:-DEBUG}" />
+  </logger>
+
+  <logger name="io.vertx">
+    <level value="WARN" />
+  </logger>
+
+  <logger name="io.netty">
+    <level value="WARN" />
+  </logger>
+
+  <logger name="akka">
+    <level value="INFO" />
+  </logger>
+
+  <logger name="oracle">
+    <level value="${log.oracle.level:-DEBUG}" />
+  </logger>
+
+  <logger name="org.springframework">
+    <level value="INFO" />
+  </logger>
+
+  <root>
+    <level value="INFO" />
+    <appender-ref ref="CONSOLE" />
+  </root>
+</configuration>

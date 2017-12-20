@@ -1,0 +1,56 @@
+#%RAML 0.8
+---
+title: CDB Procedure Call Service REST API
+version: v1
+baseUri: http://{hostUrl}/cdb/procedurecall-service
+baseUriParameters:
+  hostUrl:
+    enum: [ "localhost:9092", "pcdtckaf01d.emea1.cis.trcloud:9092", alpha.commodities.int.thomsonreuters.com ]
+    description: Deployment host URL
+
+/inventory:
+    get:
+      description: Retrieve inventory of procedures to call.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                { "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "description": "Get list of available procedure calls and its' signatures."
+                }
+/meta/{procedureName}:
+  get:
+    description: Retrieve documentation of url query parameters to call on a specific procedure. Like ?parameter=value
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              { "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "description": "Get the procedure signature details.",
+                "properties": {
+                  "procedureName":  { "type": "string" }
+                },
+                "required": [ "procedureName" ]
+              }
+
+
+/data/{procedureNameAndParams}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              { "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "description": "Call the procedure and fetch content from DB",
+                "properties": {
+                  "procedureNameAndParams":  { "type": "string" }
+                },
+                "required": [ "procedureName" ]
+              }
+      500:

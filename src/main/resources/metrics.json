@@ -1,0 +1,10 @@
+{
+  "jmxEnabled": true,
+  "jmxDomain": "com.tr.service",
+  "monitoredServerUris": [
+    {
+      "value": "/procedurecall-service/.*",
+      "type": "REGEX"
+    }
+  ]
+}
